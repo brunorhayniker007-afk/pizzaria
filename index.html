@@ -38,14 +38,14 @@ body::before {
 }
 
 h1 {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     font-size: 22px;
 }
 
 button {
     width: 100%;
     padding: 22px;
-    margin: 14px 0;
+    margin: 12px 0;
     font-size: 22px;
     font-weight: bold;
     border: none;
@@ -67,7 +67,7 @@ button:active {
 .print { background: linear-gradient(135deg, #f39c12, #e67e22); }
 
 .painel {
-    margin-top: 35px;
+    margin-top: 25px;
     background: rgba(0,0,0,0.65);
     padding: 25px;
     border-radius: 25px;
@@ -76,17 +76,23 @@ button:active {
 
 .item {
     font-size: 20px;
-    margin: 8px 0;
+    margin: 6px 0;
 }
 
 .total {
-    font-size: 30px;
+    font-size: 28px;
     font-weight: bold;
-    margin-top: 15px;
+    margin-top: 10px;
     color: #f1c40f;
 }
 
-/* ===== ESTILO DE IMPRESSÃO ===== */
+.data {
+    font-size: 14px;
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+/* ===== IMPRESSÃO ===== */
 @media print {
     body {
         background: white !important;
@@ -127,9 +133,8 @@ button:active {
 <button class="reset" onclick="resetar()">🔄 Zerar Noite</button>
 <button class="print" onclick="imprimir()">🖨️ Imprimir Relatório</button>
 
-<div class="painel" id="relatorio">
-    <h2>Pizzaria Harmonia</h2>
-    <div class="item">Data: <span id="data"></span></div>
+<div class="painel">
+    <div class="data" id="data"></div>
     <hr>
     <div class="item">Pequenas: <span id="p">0</span></div>
     <div class="item">Grandes: <span id="g">0</span></div>
@@ -144,16 +149,18 @@ let p = Number(localStorage.getItem("p")) || 0;
 let g = Number(localStorage.getItem("g")) || 0;
 let gi = Number(localStorage.getItem("gi")) || 0;
 
-function atualizar() {
+function atualizarContadores() {
     document.getElementById("p").innerText = p;
     document.getElementById("g").innerText = g;
     document.getElementById("gi").innerText = gi;
     document.getElementById("total").innerText = p + g + gi;
+}
 
-    const hoje = new Date();
+function atualizarRelogio() {
+    const agora = new Date();
     document.getElementById("data").innerText =
-        hoje.toLocaleDateString('pt-BR') + " - " +
-        hoje.toLocaleTimeString('pt-BR');
+        agora.toLocaleDateString('pt-BR') + " - " +
+        agora.toLocaleTimeString('pt-BR');
 }
 
 function add(tipo) {
@@ -165,7 +172,7 @@ function add(tipo) {
     localStorage.setItem("g", g);
     localStorage.setItem("gi", gi);
 
-    atualizar();
+    atualizarContadores();
 
     if (navigator.vibrate) navigator.vibrate(40);
 }
@@ -174,7 +181,7 @@ function resetar() {
     if (confirm("Tem certeza que quer zerar a noite?")) {
         p = 0; g = 0; gi = 0;
         localStorage.clear();
-        atualizar();
+        atualizarContadores();
     }
 }
 
@@ -182,7 +189,10 @@ function imprimir() {
     window.print();
 }
 
-atualizar();
+/* Inicialização */
+atualizarContadores();
+atualizarRelogio();
+setInterval(atualizarRelogio, 1000);
 </script>
 
 </body>
