@@ -8,21 +8,11 @@
 <style>
 body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: url('logo.png') no-repeat center center fixed;
-    background-size: cover;
+    font-family: Arial, sans-serif;
+    background: #111;
     color: white;
     display: flex;
     justify-content: center;
-}
-
-/* Camada escura */
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.80);
-    z-index: -1;
 }
 
 .container {
@@ -32,89 +22,81 @@ body::before {
     text-align: center;
 }
 
-.logo-topo {
-    width: 140px;
-    margin-bottom: 10px;
-}
-
 h1 {
     margin-bottom: 20px;
-    font-size: 22px;
 }
 
 button {
     width: 100%;
-    padding: 22px;
-    margin: 12px 0;
-    font-size: 22px;
+    padding: 20px;
+    margin: 10px 0;
+    font-size: 20px;
     font-weight: bold;
     border: none;
-    border-radius: 20px;
+    border-radius: 15px;
     cursor: pointer;
-    transition: 0.2s ease;
     color: white;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
 }
 
-button:active {
-    transform: scale(0.94);
-}
-
-.pequena { background: linear-gradient(135deg, #2ecc71, #27ae60); }
-.grande { background: linear-gradient(135deg, #3498db, #2980b9); }
-.gigante { background: linear-gradient(135deg, #e74c3c, #c0392b); }
-.reset { background: linear-gradient(135deg, #444, #222); }
-.print { background: linear-gradient(135deg, #f39c12, #e67e22); }
+.pequena { background: #27ae60; }
+.grande { background: #2980b9; }
+.gigante { background: #c0392b; }
+.reset { background: #444; }
+.print { background: #f39c12; }
 
 .painel {
-    margin-top: 25px;
-    background: rgba(0,0,0,0.65);
-    padding: 25px;
-    border-radius: 25px;
-    backdrop-filter: blur(8px);
-}
-
-.item {
-    font-size: 20px;
-    margin: 6px 0;
+    margin-top: 20px;
+    background: #222;
+    padding: 20px;
+    border-radius: 15px;
 }
 
 .total {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: bold;
     margin-top: 10px;
-    color: #f1c40f;
 }
 
-.data {
-    font-size: 14px;
-    margin-bottom: 10px;
-    opacity: 0.8;
-}
-
-/* ===== IMPRESSÃO ===== */
+/* ===== IMPRESSÃO TÉRMICA ===== */
 @media print {
+
     body {
         background: white !important;
-        color: black;
+        color: black !important;
     }
 
-    body::before,
-    button,
-    .logo-topo {
+    button {
         display: none !important;
     }
 
     .container {
-        max-width: 100%;
+        width: 58mm;
+        max-width: 58mm;
         padding: 0;
     }
 
     .painel {
         background: none;
-        box-shadow: none;
-        backdrop-filter: none;
+        padding: 0;
+        border-radius: 0;
+        text-align: center;
     }
+
+    h2 {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+
+    .item {
+        font-size: 16px;
+        margin: 5px 0;
+    }
+
+    .total {
+        font-size: 18px;
+        margin-top: 8px;
+    }
+
 }
 </style>
 </head>
@@ -123,23 +105,24 @@ button:active {
 
 <div class="container">
 
-<img src="logo.png" class="logo-topo">
 <h1>Controle da Noite</h1>
 
-<button class="pequena" onclick="add('p')">🍕 + Pequena</button>
-<button class="grande" onclick="add('g')">🍕 + Grande</button>
-<button class="gigante" onclick="add('gi')">🍕 + Gigante</button>
+<button class="pequena" onclick="add('p')">+ Pequena</button>
+<button class="grande" onclick="add('g')">+ Grande</button>
+<button class="gigante" onclick="add('gi')">+ Gigante</button>
 
-<button class="reset" onclick="resetar()">🔄 Zerar Noite</button>
-<button class="print" onclick="imprimir()">🖨️ Imprimir Relatório</button>
+<button class="reset" onclick="resetar()">Zerar</button>
+<button class="print" onclick="imprimir()">Imprimir Relatório</button>
 
 <div class="painel">
-    <div class="data" id="data"></div>
+    <h2>PIZZARIA HARMONIA</h2>
+    <div id="data"></div>
     <hr>
     <div class="item">Pequenas: <span id="p">0</span></div>
     <div class="item">Grandes: <span id="g">0</span></div>
     <div class="item">Gigantes: <span id="gi">0</span></div>
-    <div class="total">Total Vendido: <span id="total">0</span></div>
+    <hr>
+    <div class="total">Total: <span id="total">0</span></div>
 </div>
 
 </div>
@@ -149,17 +132,15 @@ let p = Number(localStorage.getItem("p")) || 0;
 let g = Number(localStorage.getItem("g")) || 0;
 let gi = Number(localStorage.getItem("gi")) || 0;
 
-function atualizarContadores() {
+function atualizar() {
     document.getElementById("p").innerText = p;
     document.getElementById("g").innerText = g;
     document.getElementById("gi").innerText = gi;
     document.getElementById("total").innerText = p + g + gi;
-}
 
-function atualizarRelogio() {
     const agora = new Date();
     document.getElementById("data").innerText =
-        agora.toLocaleDateString('pt-BR') + " - " +
+        agora.toLocaleDateString('pt-BR') + " " +
         agora.toLocaleTimeString('pt-BR');
 }
 
@@ -172,16 +153,14 @@ function add(tipo) {
     localStorage.setItem("g", g);
     localStorage.setItem("gi", gi);
 
-    atualizarContadores();
-
-    if (navigator.vibrate) navigator.vibrate(40);
+    atualizar();
 }
 
 function resetar() {
-    if (confirm("Tem certeza que quer zerar a noite?")) {
+    if (confirm("Zerar contagem?")) {
         p = 0; g = 0; gi = 0;
         localStorage.clear();
-        atualizarContadores();
+        atualizar();
     }
 }
 
@@ -189,10 +168,8 @@ function imprimir() {
     window.print();
 }
 
-/* Inicialização */
-atualizarContadores();
-atualizarRelogio();
-setInterval(atualizarRelogio, 1000);
+atualizar();
+setInterval(atualizar, 1000);
 </script>
 
 </body>
