@@ -16,7 +16,7 @@ body {
     justify-content: center;
 }
 
-/* Camada escura sobre o fundo */
+/* Camada escura */
 body::before {
     content: "";
     position: fixed;
@@ -40,10 +40,8 @@ body::before {
 h1 {
     margin-bottom: 30px;
     font-size: 22px;
-    font-weight: 500;
 }
 
-/* BOTÕES ESTILO PREMIUM */
 button {
     width: 100%;
     padding: 22px;
@@ -62,21 +60,11 @@ button:active {
     transform: scale(0.94);
 }
 
-.pequena {
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-}
-
-.grande {
-    background: linear-gradient(135deg, #3498db, #2980b9);
-}
-
-.gigante {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-}
-
-.reset {
-    background: linear-gradient(135deg, #444, #222);
-}
+.pequena { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+.grande { background: linear-gradient(135deg, #3498db, #2980b9); }
+.gigante { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.reset { background: linear-gradient(135deg, #444, #222); }
+.print { background: linear-gradient(135deg, #f39c12, #e67e22); }
 
 .painel {
     margin-top: 35px;
@@ -84,7 +72,6 @@ button:active {
     padding: 25px;
     border-radius: 25px;
     backdrop-filter: blur(8px);
-    box-shadow: 0 0 30px rgba(0,0,0,0.8);
 }
 
 .item {
@@ -97,6 +84,31 @@ button:active {
     font-weight: bold;
     margin-top: 15px;
     color: #f1c40f;
+}
+
+/* ===== ESTILO DE IMPRESSÃO ===== */
+@media print {
+    body {
+        background: white !important;
+        color: black;
+    }
+
+    body::before,
+    button,
+    .logo-topo {
+        display: none !important;
+    }
+
+    .container {
+        max-width: 100%;
+        padding: 0;
+    }
+
+    .painel {
+        background: none;
+        box-shadow: none;
+        backdrop-filter: none;
+    }
 }
 </style>
 </head>
@@ -113,12 +125,16 @@ button:active {
 <button class="gigante" onclick="add('gi')">🍕 + Gigante</button>
 
 <button class="reset" onclick="resetar()">🔄 Zerar Noite</button>
+<button class="print" onclick="imprimir()">🖨️ Imprimir Relatório</button>
 
-<div class="painel">
+<div class="painel" id="relatorio">
+    <h2>Pizzaria Harmonia</h2>
+    <div class="item">Data: <span id="data"></span></div>
+    <hr>
     <div class="item">Pequenas: <span id="p">0</span></div>
     <div class="item">Grandes: <span id="g">0</span></div>
     <div class="item">Gigantes: <span id="gi">0</span></div>
-    <div class="total">Total: <span id="total">0</span></div>
+    <div class="total">Total Vendido: <span id="total">0</span></div>
 </div>
 
 </div>
@@ -133,6 +149,11 @@ function atualizar() {
     document.getElementById("g").innerText = g;
     document.getElementById("gi").innerText = gi;
     document.getElementById("total").innerText = p + g + gi;
+
+    const hoje = new Date();
+    document.getElementById("data").innerText =
+        hoje.toLocaleDateString('pt-BR') + " - " +
+        hoje.toLocaleTimeString('pt-BR');
 }
 
 function add(tipo) {
@@ -143,6 +164,7 @@ function add(tipo) {
     localStorage.setItem("p", p);
     localStorage.setItem("g", g);
     localStorage.setItem("gi", gi);
+
     atualizar();
 
     if (navigator.vibrate) navigator.vibrate(40);
@@ -154,6 +176,10 @@ function resetar() {
         localStorage.clear();
         atualizar();
     }
+}
+
+function imprimir() {
+    window.print();
 }
 
 atualizar();
