@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Controle de Pizzas</title>
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+    background: #111;
+    color: white;
+}
+button {
+    width: 200px;
+    height: 60px;
+    margin: 10px;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+}
+.pequena { background: #4CAF50; }
+.media { background: #2196F3; }
+.grande { background: #f44336; }
+.reset { background: #555; }
+.box {
+    margin-top: 20px;
+    font-size: 20px;
+}
+</style>
+</head>
+<body>
+
+<h1>🍕 Controle da Noite</h1>
+
+<button class="pequena" onclick="add('p')">Pequena</button><br>
+<button class="media" onclick="add('m')">Média</button><br>
+<button class="grande" onclick="add('g')">Grande</button><br>
+<button class="reset" onclick="resetar()">Zerar</button>
+
+<div class="box">
+<p>Pequenas: <span id="p">0</span></p>
+<p>Médias: <span id="m">0</span></p>
+<p>Grandes: <span id="g">0</span></p>
+<p>Total: <span id="total">0</span></p>
+</div>
+
+<script>
+let p = localStorage.getItem("p") || 0;
+let m = localStorage.getItem("m") || 0;
+let g = localStorage.getItem("g") || 0;
+
+function atualizar() {
+    document.getElementById("p").innerText = p;
+    document.getElementById("m").innerText = m;
+    document.getElementById("g").innerText = g;
+    document.getElementById("total").innerText = 
+        Number(p) + Number(m) + Number(g);
+}
+
+function add(tipo) {
+    if (tipo === 'p') p++;
+    if (tipo === 'm') m++;
+    if (tipo === 'g') g++;
+
+    localStorage.setItem("p", p);
+    localStorage.setItem("m", m);
+    localStorage.setItem("g", g);
+    atualizar();
+}
+
+function resetar() {
+    if (confirm("Tem certeza que quer zerar?")) {
+        p = 0; m = 0; g = 0;
+        localStorage.clear();
+        atualizar();
+    }
+}
+
+atualizar();
+</script>
+
+</body>
+</html>
