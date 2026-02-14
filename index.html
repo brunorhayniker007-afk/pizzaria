@@ -3,16 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Controle da Pizzaria</title>
+<title>Pizzaria Harmonia - Controle</title>
 
 <style>
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(160deg, #111, #1c1c1c);
+    background: url('logo.png') no-repeat center center fixed;
+    background-size: cover;
     color: white;
     display: flex;
     justify-content: center;
+}
+
+/* Camada escura sobre o fundo */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.80);
+    z-index: -1;
 }
 
 .container {
@@ -22,11 +32,18 @@ body {
     text-align: center;
 }
 
-h1 {
-    margin-bottom: 30px;
-    font-size: 28px;
+.logo-topo {
+    width: 140px;
+    margin-bottom: 10px;
 }
 
+h1 {
+    margin-bottom: 30px;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+/* BOTÕES ESTILO PREMIUM */
 button {
     width: 100%;
     padding: 22px;
@@ -63,11 +80,11 @@ button:active {
 
 .painel {
     margin-top: 35px;
-    background: rgba(255,255,255,0.05);
+    background: rgba(0,0,0,0.65);
     padding: 25px;
     border-radius: 25px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 0 30px rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 30px rgba(0,0,0,0.8);
 }
 
 .item {
@@ -88,7 +105,8 @@ button:active {
 
 <div class="container">
 
-<h1>🍕 Controle da Noite</h1>
+<img src="logo.png" class="logo-topo">
+<h1>Controle da Noite</h1>
 
 <button class="pequena" onclick="add('p')">🍕 + Pequena</button>
 <button class="grande" onclick="add('g')">🍕 + Grande</button>
@@ -127,7 +145,7 @@ function add(tipo) {
     localStorage.setItem("gi", gi);
     atualizar();
 
-    if (navigator.vibrate) navigator.vibrate(50);
+    if (navigator.vibrate) navigator.vibrate(40);
 }
 
 function resetar() {
