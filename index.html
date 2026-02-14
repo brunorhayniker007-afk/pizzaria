@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pizzaria Harmonia - Controle</title>
+<title>Controle da Noite</title>
 
 <style>
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: monospace;
     background: #111;
     color: white;
     display: flex;
@@ -17,7 +17,7 @@ body {
 
 .container {
     width: 100%;
-    max-width: 420px;
+    max-width: 400px;
     padding: 20px;
     text-align: center;
 }
@@ -28,12 +28,12 @@ h1 {
 
 button {
     width: 100%;
-    padding: 20px;
-    margin: 10px 0;
-    font-size: 20px;
+    padding: 18px;
+    margin: 8px 0;
+    font-size: 18px;
     font-weight: bold;
     border: none;
-    border-radius: 15px;
+    border-radius: 10px;
     cursor: pointer;
     color: white;
 }
@@ -41,62 +41,62 @@ button {
 .pequena { background: #27ae60; }
 .grande { background: #2980b9; }
 .gigante { background: #c0392b; }
-.reset { background: #444; }
+.reset { background: #555; }
 .print { background: #f39c12; }
 
 .painel {
     margin-top: 20px;
     background: #222;
-    padding: 20px;
-    border-radius: 15px;
+    padding: 15px;
+    border-radius: 10px;
 }
 
-.total {
-    font-size: 26px;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-/* ===== IMPRESSÃO TÉRMICA ===== */
+/* ===== FORMATO EXATO 80MM ===== */
 @media print {
+
+    @page {
+        width: 80mm;
+        margin: 0;
+    }
 
     body {
         background: white !important;
         color: black !important;
     }
 
-    button {
+    button, h1 {
         display: none !important;
     }
 
     .container {
-        width: 58mm;
-        max-width: 58mm;
+        width: 72mm;
+        max-width: 72mm;
         padding: 0;
+        margin: 0 auto;
     }
 
     .painel {
         background: none;
         padding: 0;
-        border-radius: 0;
         text-align: center;
-    }
-
-    h2 {
-        font-size: 18px;
-        margin-bottom: 5px;
-    }
-
-    .item {
         font-size: 16px;
-        margin: 5px 0;
+    }
+
+    .linha {
+        margin: 4px 0;
     }
 
     .total {
         font-size: 18px;
-        margin-top: 8px;
+        font-weight: bold;
+        margin-top: 6px;
     }
 
+    hr {
+        border: none;
+        border-top: 1px dashed black;
+        margin: 6px 0;
+    }
 }
 </style>
 </head>
@@ -115,14 +115,14 @@ button {
 <button class="print" onclick="imprimir()">Imprimir Relatório</button>
 
 <div class="painel">
-    <h2>PIZZARIA HARMONIA</h2>
-    <div id="data"></div>
+    <div class="linha"><strong>PIZZARIA HARMONIA</strong></div>
+    <div class="linha" id="data"></div>
     <hr>
-    <div class="item">Pequenas: <span id="p">0</span></div>
-    <div class="item">Grandes: <span id="g">0</span></div>
-    <div class="item">Gigantes: <span id="gi">0</span></div>
+    <div class="linha">Pequenas: <span id="p">0</span></div>
+    <div class="linha">Grandes: <span id="g">0</span></div>
+    <div class="linha">Gigantes: <span id="gi">0</span></div>
     <hr>
-    <div class="total">Total: <span id="total">0</span></div>
+    <div class="total">TOTAL: <span id="total">0</span></div>
 </div>
 
 </div>
