@@ -9,63 +9,83 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #1e1e1e, #2c3e50);
     text-align: center;
     color: white;
-    background: 
-        linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)),
-        url("logo.png") no-repeat center center fixed;
-    background-size: 400px;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+}
+
+.logo {
+    width: 200px;
+    margin: 20px auto;
+    opacity: 0.9;
 }
 
 h1 {
-    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+#relogio {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #f1c40f;
 }
 
 button {
-    width: 250px;
+    width: 100%;
     padding: 15px;
-    margin: 10px;
+    margin: 8px 0;
     border: none;
     border-radius: 8px;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: scale(1.03);
 }
 
 .pequena { background: #2ecc71; }
 .grande { background: #3498db; }
 .gigante { background: #e74c3c; }
-.zerar { background: #95a5a6; }
+.zerar { background: #7f8c8d; }
 .imprimir { background: #f1c40f; color: black; }
-
-#relogio {
-    margin-top: 15px;
-    font-size: 18px;
-}
 
 #relatorio {
     margin-top: 20px;
-    font-size: 16px;
+    font-size: 18px;
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>Controle da Noite</h1>
+<div class="container">
 
+<img src="logo.png" class="logo">
+
+<h1>Controle da Noite</h1>
 <div id="relogio"></div>
 
 <button class="pequena" onclick="adicionar('pequenas')">+ Pequena</button>
 <button class="grande" onclick="adicionar('grandes')">+ Grande</button>
 <button class="gigante" onclick="adicionar('gigantes')">+ Gigante</button>
-
-<br>
-
 <button class="zerar" onclick="zerar()">Zerar</button>
 <button class="imprimir" onclick="imprimirRelatorio()">Imprimir Relatório</button>
 
 <div id="relatorio"></div>
+
+</div>
 
 <script>
 function atualizarRelatorio() {
@@ -74,8 +94,8 @@ function atualizarRelatorio() {
     const gigantes = localStorage.getItem("gigantes") || 0;
 
     document.getElementById("relatorio").innerHTML = `
-        Pequenas: ${pequenas} <br>
-        Grandes: ${grandes} <br>
+        Pequenas: ${pequenas}<br>
+        Grandes: ${grandes}<br>
         Gigantes: ${gigantes}
     `;
 }
@@ -98,121 +118,60 @@ function zerar() {
 
 function atualizarRelogio() {
     const agora = new Date();
-    const dataHora = agora.toLocaleString("pt-BR");
-    document.getElementById("relogio").innerText = dataHora;
+    document.getElementById("relogio").innerText =
+        agora.toLocaleString("pt-BR");
 }
 
 setInterval(atualizarRelogio, 1000);
 
 function imprimirRelatorio() {
+
     const pequenas = localStorage.getItem("pequenas") || 0;
     const grandes = localStorage.getItem("grandes") || 0;
     const gigantes = localStorage.getItem("gigantes") || 0;
 
     const total = Number(pequenas) + Number(grandes) + Number(gigantes);
+    const data = new Date().toLocaleDateString("pt-BR");
 
-    const agora = new Date();
-    const data = agora.toLocaleDateString("pt-BR");
+    const texto = `
+PIZZARIA HARMONIA
+${data}
+--------------------------------
+Pequenas: ${pequenas}
+Grandes:  ${grandes}
+Gigantes: ${gigantes}
+--------------------------------
+TOTAL: ${total}
 
-    const conteudo = `
-    <html>
-    <head>
-        <title>Relatório</title>
-        <style>
-            @page {
-                size: 58mm auto;
-                margin: 0;
-            }
-
-            body {
-                width: 58mm;
-                font-family: monospace;
-                text-align: center;
-                margin: 0;
-                padding: 5px;
-            }
-
-            .titulo {
-                font-size: 18px;
-                font-weight: bold;
-                margin-top: 5px;
-            }
-
-            .data {
-                font-size: 14px;
-                margin-bottom: 10px;
-            }
-
-            .linha {
-                display: flex;
-                justify-content: space-between;
-                font-size: 16px;
-                margin: 6px 0;
-            }
-
-            .separador {
-                border-top: 1px dashed black;
-                margin: 8px 0;
-            }
-
-            .total {
-                font-size: 20px;
-                font-weight: bold;
-                margin-top: 10px;
-            }
-
-            .rodape {
-                font-size: 12px;
-                margin-top: 15px;
-            }
-        </style>
-    </head>
-    <body>
-
-        <div class="titulo">PIZZARIA HARMONIA</div>
-        <div class="data">${data}</div>
-
-        <div class="separador"></div>
-
-        <div class="linha">
-            <span>Pequenas</span>
-            <span>${pequenas}</span>
-        </div>
-
-        <div class="linha">
-            <span>Grandes</span>
-            <span>${grandes}</span>
-        </div>
-
-        <div class="linha">
-            <span>Gigantes</span>
-            <span>${gigantes}</span>
-        </div>
-
-        <div class="separador"></div>
-
-        <div class="total">TOTAL: ${total}</div>
-
-        <div class="rodape">
-            Controle de Vendas da Noite
-        </div>
-
-        <script>
-            window.onload = function() {
-                window.print();
-                window.onafterprint = function() {
-                    window.close();
-                }
-            }
-        <\/script>
-
-    </body>
-    </html>
-    `;
+Controle de Vendas da Noite
+`;
 
     const janela = window.open("", "", "width=300,height=600");
-    janela.document.write(conteudo);
+
+    janela.document.write(`
+        <html>
+        <head>
+        <style>
+            @page { size: 58mm auto; margin: 0; }
+            body {
+                font-family: monospace;
+                white-space: pre;
+                font-size: 16px;
+                text-align: left;
+                padding: 10px;
+            }
+        </style>
+        </head>
+        <body>${texto}</body>
+        </html>
+    `);
+
     janela.document.close();
+
+    janela.onload = function() {
+        janela.print();
+        janela.close();
+    };
 }
 
 atualizarRelatorio();
