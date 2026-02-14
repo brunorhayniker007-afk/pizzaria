@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,182 +9,214 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: url('logo.png') no-repeat center center fixed;
-    background-size: cover;
-    color: white;
-    display: flex;
-    justify-content: center;
-}
-
-/* Escurece o fundo */
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.75);
-    z-index: -1;
-}
-
-.container {
-    width: 100%;
-    max-width: 420px;
-    padding: 20px;
     text-align: center;
+    color: white;
+    background: 
+        linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)),
+        url("logo.png") no-repeat center center fixed;
+    background-size: 400px;
 }
 
 h1 {
-    margin-bottom: 20px;
+    margin-top: 30px;
 }
 
 button {
-    width: 100%;
-    padding: 18px;
-    margin: 8px 0;
+    width: 250px;
+    padding: 15px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
     font-size: 18px;
     font-weight: bold;
-    border: none;
-    border-radius: 12px;
     cursor: pointer;
-    color: white;
 }
 
-.pequena { background: #27ae60; }
-.grande { background: #2980b9; }
-.gigante { background: #c0392b; }
-.reset { background: #555; }
-.print { background: #f39c12; }
+.pequena { background: #2ecc71; }
+.grande { background: #3498db; }
+.gigante { background: #e74c3c; }
+.zerar { background: #95a5a6; }
+.imprimir { background: #f1c40f; color: black; }
 
-.painel {
+#relogio {
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+#relatorio {
     margin-top: 20px;
-    background: rgba(0,0,0,0.7);
-    padding: 15px;
-    border-radius: 12px;
-}
-
-/* ===== IMPRESSÃO ELGIN i8 80MM ===== */
-@media print {
-
-    @page {
-        width: 80mm;
-        margin: 0;
-    }
-
-    body {
-        background: white !important;
-        color: black !important;
-    }
-
-    body::before {
-        display: none !important;
-    }
-
-    button, h1 {
-        display: none !important;
-    }
-
-    .container {
-        width: 72mm;
-        max-width: 72mm;
-        padding: 0;
-        margin: 0 auto;
-    }
-
-    .painel {
-        background: none;
-        padding: 0;
-        text-align: center;
-        font-size: 16px;
-        color: black;
-    }
-
-    .linha {
-        margin: 4px 0;
-    }
-
-    .total {
-        font-size: 18px;
-        font-weight: bold;
-        margin-top: 6px;
-    }
-
-    hr {
-        border: none;
-        border-top: 1px dashed black;
-        margin: 6px 0;
-    }
+    font-size: 16px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
 <h1>Controle da Noite</h1>
 
-<button class="pequena" onclick="add('p')">+ Pequena</button>
-<button class="grande" onclick="add('g')">+ Grande</button>
-<button class="gigante" onclick="add('gi')">+ Gigante</button>
+<div id="relogio"></div>
 
-<button class="reset" onclick="resetar()">Zerar</button>
-<button class="print" onclick="imprimir()">Imprimir Relatório</button>
+<button class="pequena" onclick="adicionar('pequenas')">+ Pequena</button>
+<button class="grande" onclick="adicionar('grandes')">+ Grande</button>
+<button class="gigante" onclick="adicionar('gigantes')">+ Gigante</button>
 
-<div class="painel">
-    <div class="linha"><strong>PIZZARIA HARMONIA</strong></div>
-    <div class="linha" id="data"></div>
-    <hr>
-    <div class="linha">Pequenas: <span id="p">0</span></div>
-    <div class="linha">Grandes: <span id="g">0</span></div>
-    <div class="linha">Gigantes: <span id="gi">0</span></div>
-    <hr>
-    <div class="total">TOTAL: <span id="total">0</span></div>
-</div>
+<br>
 
-</div>
+<button class="zerar" onclick="zerar()">Zerar</button>
+<button class="imprimir" onclick="imprimirRelatorio()">Imprimir Relatório</button>
+
+<div id="relatorio"></div>
 
 <script>
-let p = Number(localStorage.getItem("p")) || 0;
-let g = Number(localStorage.getItem("g")) || 0;
-let gi = Number(localStorage.getItem("gi")) || 0;
+function atualizarRelatorio() {
+    const pequenas = localStorage.getItem("pequenas") || 0;
+    const grandes = localStorage.getItem("grandes") || 0;
+    const gigantes = localStorage.getItem("gigantes") || 0;
 
-function atualizar() {
-    document.getElementById("p").innerText = p;
-    document.getElementById("g").innerText = g;
-    document.getElementById("gi").innerText = gi;
-    document.getElementById("total").innerText = p + g + gi;
-
-    const agora = new Date();
-    document.getElementById("data").innerText =
-        agora.toLocaleDateString('pt-BR') + " " +
-        agora.toLocaleTimeString('pt-BR');
+    document.getElementById("relatorio").innerHTML = `
+        Pequenas: ${pequenas} <br>
+        Grandes: ${grandes} <br>
+        Gigantes: ${gigantes}
+    `;
 }
 
-function add(tipo) {
-    if (tipo === 'p') p++;
-    if (tipo === 'g') g++;
-    if (tipo === 'gi') gi++;
-
-    localStorage.setItem("p", p);
-    localStorage.setItem("g", g);
-    localStorage.setItem("gi", gi);
-
-    atualizar();
+function adicionar(tipo) {
+    let valor = Number(localStorage.getItem(tipo)) || 0;
+    valor++;
+    localStorage.setItem(tipo, valor);
+    atualizarRelatorio();
 }
 
-function resetar() {
-    if (confirm("Zerar contagem?")) {
-        p = 0; g = 0; gi = 0;
-        localStorage.clear();
-        atualizar();
+function zerar() {
+    if(confirm("Tem certeza que deseja zerar?")) {
+        localStorage.setItem("pequenas", 0);
+        localStorage.setItem("grandes", 0);
+        localStorage.setItem("gigantes", 0);
+        atualizarRelatorio();
     }
 }
 
-function imprimir() {
-    window.print();
+function atualizarRelogio() {
+    const agora = new Date();
+    const dataHora = agora.toLocaleString("pt-BR");
+    document.getElementById("relogio").innerText = dataHora;
 }
 
-atualizar();
-setInterval(atualizar, 1000);
+setInterval(atualizarRelogio, 1000);
+
+function imprimirRelatorio() {
+    const pequenas = localStorage.getItem("pequenas") || 0;
+    const grandes = localStorage.getItem("grandes") || 0;
+    const gigantes = localStorage.getItem("gigantes") || 0;
+
+    const total = Number(pequenas) + Number(grandes) + Number(gigantes);
+
+    const agora = new Date();
+    const data = agora.toLocaleDateString("pt-BR");
+
+    const conteudo = `
+    <html>
+    <head>
+        <title>Relatório</title>
+        <style>
+            @page {
+                size: 58mm auto;
+                margin: 0;
+            }
+
+            body {
+                width: 58mm;
+                font-family: monospace;
+                text-align: center;
+                margin: 0;
+                padding: 5px;
+            }
+
+            .titulo {
+                font-size: 18px;
+                font-weight: bold;
+                margin-top: 5px;
+            }
+
+            .data {
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+
+            .linha {
+                display: flex;
+                justify-content: space-between;
+                font-size: 16px;
+                margin: 6px 0;
+            }
+
+            .separador {
+                border-top: 1px dashed black;
+                margin: 8px 0;
+            }
+
+            .total {
+                font-size: 20px;
+                font-weight: bold;
+                margin-top: 10px;
+            }
+
+            .rodape {
+                font-size: 12px;
+                margin-top: 15px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="titulo">PIZZARIA HARMONIA</div>
+        <div class="data">${data}</div>
+
+        <div class="separador"></div>
+
+        <div class="linha">
+            <span>Pequenas</span>
+            <span>${pequenas}</span>
+        </div>
+
+        <div class="linha">
+            <span>Grandes</span>
+            <span>${grandes}</span>
+        </div>
+
+        <div class="linha">
+            <span>Gigantes</span>
+            <span>${gigantes}</span>
+        </div>
+
+        <div class="separador"></div>
+
+        <div class="total">TOTAL: ${total}</div>
+
+        <div class="rodape">
+            Controle de Vendas da Noite
+        </div>
+
+        <script>
+            window.onload = function() {
+                window.print();
+                window.onafterprint = function() {
+                    window.close();
+                }
+            }
+        <\/script>
+
+    </body>
+    </html>
+    `;
+
+    const janela = window.open("", "", "width=300,height=600");
+    janela.document.write(conteudo);
+    janela.document.close();
+}
+
+atualizarRelatorio();
+atualizarRelogio();
 </script>
 
 </body>
