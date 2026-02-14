@@ -8,16 +8,26 @@
 <style>
 body {
     margin: 0;
-    font-family: monospace;
-    background: #111;
+    font-family: Arial, sans-serif;
+    background: url('logo.png') no-repeat center center fixed;
+    background-size: cover;
     color: white;
     display: flex;
     justify-content: center;
 }
 
+/* Escurece o fundo */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: -1;
+}
+
 .container {
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
     padding: 20px;
     text-align: center;
 }
@@ -33,7 +43,7 @@ button {
     font-size: 18px;
     font-weight: bold;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
     color: white;
 }
@@ -46,12 +56,12 @@ button {
 
 .painel {
     margin-top: 20px;
-    background: #222;
+    background: rgba(0,0,0,0.7);
     padding: 15px;
-    border-radius: 10px;
+    border-radius: 12px;
 }
 
-/* ===== FORMATO EXATO 80MM ===== */
+/* ===== IMPRESSÃO ELGIN i8 80MM ===== */
 @media print {
 
     @page {
@@ -62,6 +72,10 @@ button {
     body {
         background: white !important;
         color: black !important;
+    }
+
+    body::before {
+        display: none !important;
     }
 
     button, h1 {
@@ -80,6 +94,7 @@ button {
         padding: 0;
         text-align: center;
         font-size: 16px;
+        color: black;
     }
 
     .linha {
