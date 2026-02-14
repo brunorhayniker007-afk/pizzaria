@@ -1,60 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Controle de Pizzas</title>
+
 <style>
 body {
-    font-family: Arial;
-    text-align: center;
-    background: #111;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #1e1e1e, #111);
     color: white;
+    display: flex;
+    justify-content: center;
 }
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
 button {
-    width: 200px;
-    height: 60px;
-    margin: 10px;
-    font-size: 18px;
-    border: none;
-    border-radius: 10px;
-}
-.pequena { background: #4CAF50; }
-.media { background: #2196F3; }
-.grande { background: #f44336; }
-.reset { background: #555; }
-.box {
-    margin-top: 20px;
+    width: 100%;
+    height: 70px;
+    margin: 10px 0;
     font-size: 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:active {
+    transform: scale(0.96);
+}
+
+.pequena { background: #2ecc71; }
+.media { background: #3498db; }
+.grande { background: #e74c3c; }
+.reset { background: #555; }
+
+.painel {
+    margin-top: 30px;
+    background: #1b1b1b;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+.item {
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+.total {
+    font-size: 26px;
+    font-weight: bold;
+    margin-top: 15px;
+    color: #f1c40f;
 }
 </style>
 </head>
+
 <body>
+
+<div class="container">
 
 <h1>🍕 Controle da Noite</h1>
 
-<button class="pequena" onclick="add('p')">Pequena</button><br>
-<button class="media" onclick="add('m')">Média</button><br>
-<button class="grande" onclick="add('g')">Grande</button><br>
-<button class="reset" onclick="resetar()">Zerar</button>
+<button class="pequena" onclick="add('p')">+ Pequena</button>
+<button class="media" onclick="add('m')">+ Média</button>
+<button class="grande" onclick="add('g')">+ Grande</button>
+<button class="reset" onclick="resetar()">Zerar Noite</button>
 
-<div class="box">
-<p>Pequenas: <span id="p">0</span></p>
-<p>Médias: <span id="m">0</span></p>
-<p>Grandes: <span id="g">0</span></p>
-<p>Total: <span id="total">0</span></p>
+<div class="painel">
+    <div class="item">Pequenas: <span id="p">0</span></div>
+    <div class="item">Médias: <span id="m">0</span></div>
+    <div class="item">Grandes: <span id="g">0</span></div>
+    <div class="total">Total: <span id="total">0</span></div>
+</div>
+
 </div>
 
 <script>
-let p = localStorage.getItem("p") || 0;
-let m = localStorage.getItem("m") || 0;
-let g = localStorage.getItem("g") || 0;
+let p = Number(localStorage.getItem("p")) || 0;
+let m = Number(localStorage.getItem("m")) || 0;
+let g = Number(localStorage.getItem("g")) || 0;
 
 function atualizar() {
     document.getElementById("p").innerText = p;
     document.getElementById("m").innerText = m;
     document.getElementById("g").innerText = g;
-    document.getElementById("total").innerText = 
-        Number(p) + Number(m) + Number(g);
+    document.getElementById("total").innerText = p + m + g;
 }
 
 function add(tipo) {
@@ -69,7 +114,7 @@ function add(tipo) {
 }
 
 function resetar() {
-    if (confirm("Tem certeza que quer zerar?")) {
+    if (confirm("Tem certeza que quer zerar a noite?")) {
         p = 0; m = 0; g = 0;
         localStorage.clear();
         atualizar();
