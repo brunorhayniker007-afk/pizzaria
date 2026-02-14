@@ -15,15 +15,15 @@ body {
 }
 
 .container {
-    max-width: 500px;
+    max-width: 600px;
     margin: auto;
     padding: 20px;
 }
 
 .logo {
-    width: 200px;
+    width: 220px;
     margin: 20px auto;
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
 h1 {
@@ -88,6 +88,7 @@ button:hover {
 </div>
 
 <script>
+
 function atualizarRelatorio() {
     const pequenas = localStorage.getItem("pequenas") || 0;
     const grandes = localStorage.getItem("grandes") || 0;
@@ -133,49 +134,109 @@ function imprimirRelatorio() {
     const total = Number(pequenas) + Number(grandes) + Number(gigantes);
     const data = new Date().toLocaleDateString("pt-BR");
 
-    const texto = `
-PIZZARIA HARMONIA
-${data}
---------------------------------
-Pequenas: ${pequenas}
-Grandes:  ${grandes}
-Gigantes: ${gigantes}
---------------------------------
-TOTAL: ${total}
-
-Controle de Vendas da Noite
-`;
-
-    const janela = window.open("", "", "width=300,height=600");
+    const janela = window.open("", "", "width=400,height=600");
 
     janela.document.write(`
-        <html>
-        <head>
-        <style>
-            @page { size: 58mm auto; margin: 0; }
-            body {
-                font-family: monospace;
-                white-space: pre;
-                font-size: 16px;
-                text-align: left;
-                padding: 10px;
+    <html>
+    <head>
+    <style>
+        @page {
+            size: 80mm auto;
+            margin: 0;
+        }
+
+        body {
+            width: 80mm;
+            font-family: monospace;
+            text-align: center;
+            margin: 0;
+            padding: 10px;
+        }
+
+        .titulo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .data {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .linha {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            margin: 8px 0;
+        }
+
+        .separador {
+            border-top: 1px dashed black;
+            margin: 10px 0;
+        }
+
+        .total {
+            font-size: 26px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .rodape {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+    </style>
+    </head>
+
+    <body>
+
+        <div class="titulo">PIZZARIA HARMONIA</div>
+        <div class="data">${data}</div>
+
+        <div class="separador"></div>
+
+        <div class="linha">
+            <span>Pequenas</span>
+            <span>${pequenas}</span>
+        </div>
+
+        <div class="linha">
+            <span>Grandes</span>
+            <span>${grandes}</span>
+        </div>
+
+        <div class="linha">
+            <span>Gigantes</span>
+            <span>${gigantes}</span>
+        </div>
+
+        <div class="separador"></div>
+
+        <div class="total">TOTAL: ${total}</div>
+
+        <div class="rodape">
+            Controle de Vendas da Noite
+        </div>
+
+        <script>
+            window.onload = function() {
+                window.print();
+                window.onafterprint = function() {
+                    window.close();
+                }
             }
-        </style>
-        </head>
-        <body>${texto}</body>
-        </html>
+        <\/script>
+
+    </body>
+    </html>
     `);
 
     janela.document.close();
-
-    janela.onload = function() {
-        janela.print();
-        janela.close();
-    };
 }
 
 atualizarRelatorio();
 atualizarRelogio();
+
 </script>
 
 </body>
